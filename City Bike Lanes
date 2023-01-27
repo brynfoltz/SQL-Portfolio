@@ -1,0 +1,57 @@
+CREATE TABLE BIT_DB4.CityBikeLanes (
+id integer primary key,
+year_installed year not null,
+year_updated year not null,
+street varchar not null,
+width_feet integer not null,
+safetyrating integer not null,
+protected varchar not null)
+
+--Getting an overview of the data.
+SELECT * 
+FROM CityBikeLanes 
+LIMIT 10;
+
+SELECT *
+FROM CityBikeLanes
+WHERE street='Walnut';
+
+--Your boss wants a list of all the bike lanes that have an average safety rating of 4.0 or higher. 
+--She also wants to see the average safety rating for each of those bike lanes, 
+--and a label that says "Safe Lane".
+
+WITH safety_average_cte AS (
+SELECT street, AVG(safetyrating) as 'rating'
+FROM CityBikeLanes
+GROUP BY street
+)
+
+SELECT street, rating, 'safe lane' as 'label' 
+FROM safety_average_cte
+WHERE rating >=4;
+
+
+SELECT street, safetyrating,
+AVG(safetyrating) 
+OVER (PARTITION BY street) as "Average_safety_rating"
+FROM CityBikeLanes; 
+
+SELECT street, safetyrating,
+AVG(safetyrating) OVER (PARTITION BY street) as "Average_safety_rating"
+FROM CityBikeLanes
+WHERE street='2nd'; 
+
+--list of all the bike lanes, both safety ratings for each lane, the average safety rating for each lane, 
+--and a label with the recommendation as "Remove", "Leave As-Is", or "Improvements Needed".
+
+SELECT street, safetyrating, AVG(safetyrating) 
+OVER (PARTITION BY street) AS 'average_safety_rating',
+CASE WHEN AVG(safetyrating) OVER (PARTITION BY safetyrating) >=4 THEN "Leave As-Is"
+    WHEN AVG(safetyrating) OVER (PARTITION BY safetyrating) <2.5 THEN "Remove"
+    ELSE "Improvements Needed"
+    END AS "Recommendation"
+FROM CityBikeLanes;
+
+
+ 
+
