@@ -1,0 +1,51 @@
+--For this project, I downloaded Spotify data from Kaggle, created a table and inserted the data, then ran SQL to get the following answers. 
+
+--Creating the table: 
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL 
+)
+
+--Then I inserted the Spotify Data .csv into the table.
+--Next, I explored the data using the following SQL. 
+
+SELECT *
+FROM BIT_DB4.Spotifydata;
+
+--1. Determine average energy, danceability, popularity, and duration by the artist name and track name. 
+SELECT artist_name, track_name, 
+avg(energy), 
+avg(danceability), 
+avg(popularity), 
+avg(duration_ms)
+FROM BIT_DB4.Spotifydata
+GROUP BY artist_name, track_name;
+
+--2. What are all the songs by Olivia Rodrigo in the data?
+
+SELECT track_name
+FROM BIT_DB4.Spotifydata
+WHERE artist_name = 'Olivia Rodrigo';
+
+--3. Who were the top 5 artists and songs of the year (by popularity)?
+SELECT artist_name, track_name
+FROM BIT_DB4.Spotifydata
+ORDER BY popularity desc
+LIMIT 5; 
+
