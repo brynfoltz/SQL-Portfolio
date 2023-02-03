@@ -33,3 +33,18 @@ ROUND(AVG(weight), 2) AS average_weight,
 ROUND(AVG(wingspan), 2) AS average_wingspan,
 ROUND(AVG(standing_reach), 2) AS average_standing_reach
 FROM basketball.draft_combine_stats; 
+
+/* How many players have been drafted from each school listed?
+
+SELECT school, COUNT(person_id) AS number_of_drafts
+FROM basketball.common_player_info
+GROUP BY school
+ORDER BY number_of_drafts DESC; 
+
+/* Top 25 colleges that have drafted the most amount of players. 
+
+SELECT school, COUNT(person_id) AS number_of_drafts
+FROM basketball.common_player_info
+GROUP BY school
+ORDER BY number_of_drafts DESC
+LIMIT 25; 
