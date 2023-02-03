@@ -1,0 +1,35 @@
+--Below are some queries resulted from NBA Draft History. We take a glimps into disparities among players who have been drafted into the NBA. 
+
+/*List of common players that came into the NBA or attempted to be drafted coming from Duke. 
+
+SELECT person_id, first_name, last_name, school, team_abbreviation, draft_year
+FROM basketball.common_player_info
+WHERE school='Duke'
+ORDER BY draft_year ASC; 
+
+/* How many players are still active in the data set?
+
+SELECT COUNT(is_active)
+FROM basketball.player
+WHERE is_active='1'; 
+
+/* What are the players draft combine stats of position and wingspan 
+along with their team abbreviation?
+
+SELECT dcs.player_id, cpi.first_name, cpi.last_name, cpi.team_abbreviation,
+dcs.position, dcs.wingspan
+FROM basketball.common_player_info cpi
+LEFT JOIN basketball.draft_combine_stats dcs
+ON cpi.person_id=dcs.player_id
+WHERE dcs.player_id IS NOT NULL
+AND dcs.position IS NOT NULL
+AND dcs.wingspan IS NOT NULL; 
+
+/* What is the average height, weight, wingspan, and standing reach of all NBA drafts? 
+Round 2 decimal places. 
+
+SELECT ROUND(AVG(height_wo_shoes), 2) AS average_height,
+ROUND(AVG(weight), 2) AS average_weight,
+ROUND(AVG(wingspan), 2) AS average_wingspan,
+ROUND(AVG(standing_reach), 2) AS average_standing_reach
+FROM basketball.draft_combine_stats; 
